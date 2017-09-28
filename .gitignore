@@ -1,11 +1,6 @@
-# dependencies
-node_modules
+/node_modules/
+/npm-debug.log
+/.nuxt/
+/dist/
 
-# logs
-npm-debug.log
-
-# Nuxt build
-.nuxt
-
-# Nuxt generate
-dist
+/env.js

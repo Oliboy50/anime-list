@@ -1,10 +1,10 @@
 <template>
 
-  <div class="columns">
+  <div class="component-list columns">
     <div class="column is-half is-offset-one-quarter has-text-centered">
-      <list-item v-for="item in items"
-                 :title="item.title"
-                 :image-url="item.imageUrl"
+      <item v-for="item in items" :key="item.id"
+            :id="item.id"
+            :title="item.title"
       />
     </div>
   </div>
@@ -12,20 +12,20 @@
 </template>
 
 <script>
-  import listItem from '~/components/list-item.vue'
-//  import axios from 'axios'
+  import item from '~/components/item.vue';
 
   export default {
     components: {
-      listItem,
+      item,
     },
-    data () {
-      return {
-        items: [
-          {id: 1, title: 'toto', imageUrl: 'http://bulma.io/images/placeholders/640x320.png'},
-          {id: 2, title: 'titi', imageUrl: 'http://bulma.io/images/placeholders/640x320.png'},
-        ],
-      }
-    },
-  }
+    props: [
+      'items',
+    ],
+  };
 </script>
+
+<style lang="scss">
+  .component-item {
+    margin-bottom: 20px;
+  }
+</style>
