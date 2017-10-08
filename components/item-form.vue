@@ -5,18 +5,32 @@
     <div class="field">
       <label for="component-item-form_title" class="label">Title</label>
       <div class="control">
-        <input type="text" v-model="item.title" id="component-item-form_title" class="input">
+        <input type="text" v-model="item.title" id="component-item-form_title" class="input" required>
       </div>
     </div>
 
     <div class="field">
-      <label for="component-item-form_imageUrl" class="label">Image URL</label>
+      <label for="component-item-form_description" class="label">Description</label>
       <div class="control">
-        <input type="text" v-model="item.imageUrl" id="component-item-form_imageUrl" class="input">
+        <textarea v-model="item.description" id="component-item-form_description" class="textarea"></textarea>
       </div>
     </div>
 
-    <div class="field is-grouped">
+    <div class="field">
+      <label for="component-item-form_image" class="label">Image</label>
+      <div class="control">
+        <input type="text" v-model="item.image" id="component-item-form_image" class="input">
+      </div>
+    </div>
+
+    <tags-selector v-if="itemTagsAreReadyToBeBound"
+      v-model="item.tags"
+      :all-tags="allTags"
+      label-for-id="component-item-form_tags-select"
+      class="field"
+    />
+
+    <div class="field is-grouped is-grouped-centered">
       <div class="control">
         <button type="submit" class="button is-primary">Submit</button>
       </div>
@@ -30,25 +44,42 @@
 </template>
 
 <script>
+  import tagsSelector from '~/components/tags-selector.vue';
   import manager from '~/assets/js/model/item/firebase/manager';
 
   export default {
+    components: {
+      tagsSelector,
+    },
     props: [
       'existingItem',
+      'allTags',
     ],
     data () {
       return {
         item: {
           title: '',
-          imageUrl: '',
+          description: '',
+          image: '',
+          tags: [],
         },
+        existingItemHasReplacedComponentItem: false,
       };
+    },
+    computed: {
+      itemTagsAreReadyToBeBound () {
+        return (this.existingItem) ? this.existingItemHasReplacedComponentItem : true;
+      },
     },
     mounted () {
       // apply existing item properties
       if (this.existingItem) {
-        this.item.title = this.existingItem.title;
-        this.item.imageUrl = this.existingItem.imageUrl;
+        ['title', 'description', 'image', 'tags'].forEach((key) => {
+          if (this.existingItem[key]) {
+            this.item[key] = this.existingItem[key];
+          }
+        });
+        this.existingItemHasReplacedComponentItem = true;
       }
     },
     methods: {

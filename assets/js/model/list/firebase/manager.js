@@ -1,4 +1,4 @@
-import { database, snapshotToObject, snapshotToArray, indexForKey } from '~/assets/js/common/firebase';
+import { database, snapshotToObject, snapshotToArray, indexForId } from '~/assets/js/common/firebase';
 import * as mutationTypes from '~/assets/js/const/store/mutation-types';
 
 // itemsRef.push({
@@ -33,21 +33,21 @@ export default {
         isNextShouldBeAdded = true;
         return;
       }
-      const index = prevKey ? indexForKey(items, prevKey) + 1 : 0;
+      const index = prevKey ? indexForId(items, prevKey) + 1 : 0;
       const item = snapshotToObject(childSnapshot);
       console.log('added: ', item);
       commit(mutationTypes.ADD_ITEM_LIST_ITEMS, { index, item }, { root: true });
     });
 
     ref.on('child_changed', (childSnapshot) => {
-      const index = indexForKey(items, childSnapshot.key);
+      const index = indexForId(items, childSnapshot.key);
       const item = snapshotToObject(childSnapshot);
       console.log('changed : ', item);
       commit(mutationTypes.UPDATE_ITEM_LIST_ITEMS, { index, item }, { root: true });
     });
 
     ref.on('child_removed', (childSnapshot) => {
-      const index = indexForKey(items, childSnapshot.key);
+      const index = indexForId(items, childSnapshot.key);
       console.log('removed : ', childSnapshot.key);
       commit(mutationTypes.REMOVE_ITEM_LIST_ITEMS, { index }, { root: true });
     });

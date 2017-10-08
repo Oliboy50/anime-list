@@ -1,7 +1,8 @@
 <template>
 
   <item-form
-      :existing-item="existingItem"
+    :existing-item="existingItem"
+    :allTags="tags"
   />
 
 </template>
@@ -14,6 +15,9 @@
     components: {
       itemForm,
     },
+    props: [
+      'tags',
+    ],
     async asyncData ({ route }) {
       return {
         existingItem: await manager.getItem(route.params.id),

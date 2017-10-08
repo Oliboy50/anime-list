@@ -3,8 +3,7 @@
   <div class="component-list columns">
     <div class="column is-half is-offset-one-quarter has-text-centered">
       <item v-for="item in items" :key="item.id"
-            :id="item.id"
-            :title="item.title"
+            :item="item"
       />
     </div>
   </div>
@@ -25,7 +24,9 @@
 </script>
 
 <style lang="scss">
-  .component-item {
-    margin-bottom: 20px;
+  .component-list {
+    .component-item {
+      margin-bottom: 20px;
+    }
   }
 </style>

@@ -1,17 +1,17 @@
 <template>
 
-  <item-form
+  <tag-form
     :allTags="tags"
   />
 
 </template>
 
 <script>
-  import itemForm from '~/components/item-form.vue';
+  import tagForm from '~/components/tag-form.vue';
 
   export default {
     components: {
-      itemForm,
+      tagForm,
     },
     props: [
       'tags',

@@ -26,6 +26,13 @@ module.exports = {
   ],
   loading: { color: '#3B8070' },
   build: {
+    postcss: {
+      plugins: {
+        'postcss-custom-properties': {
+          warnings: false,
+        },
+      },
+    },
     extend (config, ctx) {
       if (ctx.dev && ctx.isClient) {
         config.module.rules.push({

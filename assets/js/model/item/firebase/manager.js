@@ -1,20 +1,36 @@
-import { database, base, snapshotToObject } from '~/assets/js/common/firebase';
+import {
+  database,
+  getBaseData,
+  snapshotToObject,
+  convertRelationshipsToArray,
+  convertArrayToRelationships,
+} from '~/assets/js/common/firebase';
 
 const getItemRefForId = (id) => database.ref(`/items/${id}`);
 
 export default {
-  getItem (itemId) {
-    return getItemRefForId(itemId)
+  getItem (id) {
+    return getItemRefForId(id)
       .once('value')
-      .then((snapshot) => snapshotToObject(snapshot));
+      .then(async (snapshot) => {
+        const item = snapshotToObject(snapshot);
+        if (item.tags) {
+          item.tags = await convertRelationshipsToArray('/tags', item.tags);
+        }
+        return item;
+      });
   },
   addItem (item) {
     database.ref('/items').push({
-      createdAt: base.database.ServerValue.TIMESTAMP,
+      ...getBaseData(),
       ...item,
     });
   },
   updateItem (id, item) {
-    database.ref(`/items/${id}`).update(item);
+    const firebaseItem = {...item};
+    if (firebaseItem.tags) {
+      firebaseItem.tags = convertArrayToRelationships(firebaseItem.tags);
+    }
+    getItemRefForId(id).update(firebaseItem);
   },
 };
